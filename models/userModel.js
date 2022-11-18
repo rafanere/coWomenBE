@@ -1,33 +1,48 @@
 const mongoose = require('mongoose')
 
-const userSchema = new mongoose.Schema({
-    name: {
-        type: String,
-        required: [true, 'Nome é obrigatório!'],
-    },
-    socialname: {
-        type: String,
-    },
-    email: {
-        type: String,
-        index: true,
-        required: [true, 'E-mail é obrigatório'],
-    },
+console.log("Chegou no UserModel")
+
+const UserSchema = new mongoose.Schema({
     nickname: {
         type: String,
-        index: true,
-        required: [true, 'NickName é obrigatório'],
+        required: [true, 'Nickname é obrigatorio'],
+        index: true
     },
-    cellphone: {
+    name: {
         type: String,
+        required: [true, 'Nome é obrigatório'],
+    },
+    lastname: {
+        type: String,
+        required: [true, 'Sobrenome é obrigatório'],
     },
     image: {
         type: String,
+    },
+    email: { 
+        type: String,
+        required: [true, 'E-mail é obrigatório']
     },
     password: {
         type: String,
         required: [true, 'Senha é obrigatória']
     },
+    confirmpassword: {
+        type: String,
+        required: [true, 'Senha é obrigatória']
+    }, 
+    isSeller: {
+        type: Boolean,
+        default: false
+    },
+    isBuyer: {
+        type: Boolean,
+        default: false 
+    }, 
+    isAdmin: {
+        type: Boolean,
+        default: false
+    }
 })
 
-module.exports = mongoose.model('Users', userSchema)
+module.exports = mongoose.model('User', UserSchema)
