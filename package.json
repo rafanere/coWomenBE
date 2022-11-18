@@ -1,6 +1,6 @@
 {
   "name": "cowomenbackend",
-  "version": "1.0.0",
+  "version": "1.0.8",
   "description": "Um projeto backend criado para um site de prestação de serbviços.",
   "main": "index.js",
   "scripts": {
@@ -10,8 +10,10 @@
   "author": "Rafaela Nere",
   "license": "ISC",
   "dependencies": {
+    "bcrypt": "^5.1.0",
     "dotenv": "^16.0.3",
     "express": "^4.18.2",
-    "mongoose": "^6.6.5"
+    "jsonwebtoken": "^8.5.1",
+    "mongoose": "^6.7.0"
   }
 }
