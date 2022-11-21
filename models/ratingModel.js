@@ -1,7 +1,7 @@
 const mongoose = require('mongoose')
 
-const adsSchema = new mongoose.Schema({
-    title: {
+const ratingSchema   = new mongoose.Schema({
+    overview: {
         type: String,
         required: [true, 'Título é obrigatorio'],
         index: true
@@ -10,8 +10,9 @@ const adsSchema = new mongoose.Schema({
         type: String,
         required: [true, 'Descrição é obrigatória'],
     },
-    image: {
+    stars: {
         type: String,
+        required: [true, 'Nota é obrigatória'],
     },
     date: { 
         type: Date, 
@@ -21,13 +22,17 @@ const adsSchema = new mongoose.Schema({
         type: Boolean, 
         default: true
     },
+    edited: {
+        type: Boolean, 
+        default: false
+    },
     idUser: {
         type: String,
-    },
-    edited: {
-        type: Boolean,
-        default: false
-    } 
+    }, 
+    idAds: {
+        type: String,
+    }
+
 })
 
-module.exports = mongoose.model('Ads', adsSchema)
+module.exports = mongoose.model('Ratings', ratingSchema)

@@ -2,7 +2,7 @@ const Ads = require('../models/adsModel')
 
 module.exports = class AdsController {
 
-    // Buscando todos os usuários 
+    // Buscando todos os anúncios 
     static async showAllAds(req, res) {
         try {
             const ads = await Ads.find()
@@ -12,7 +12,7 @@ module.exports = class AdsController {
         }
     }
 
-    // Buscando um usuário específico 
+    // Buscando um anúncio específico 
     static async showAdsByID(req, res) {
         try {
             const ads = await Ads.findById(req.params.id)
@@ -25,25 +25,29 @@ module.exports = class AdsController {
         }
     }
 
-    //Modificar dados de um usuário
+    //Modificar dados de um anúncio
     static async modifyAdsByID(req, res){
         try{
-            const updatedAd = await res.ads.save()
-            res.json(updatedAd)
+            const updatedAd = await Ads.findByIdAndUpdate(
+                req.params.id, 
+                {
+                    $set: req.body.edited = true,
+                    $set: req.body
+                }, 
+                { new: true }
+            )
+            res.status(200).json(updatedAd)
         } catch (err) {
             res.status(500).json({ message: err.message })
         }
     }
 
-
-    // Criando um usuário
+    // Criando um anúncio
     static async createAd(req, res) {
         const ads = new Ads({
             title: req.body.title,
             description: req.body.description,
             image: req.body.image,
-            rangeOfPrice: req.body.rangeOfPrice,
-            
         })
         try {
             const newAd = await ads.save()
@@ -52,7 +56,5 @@ module.exports = class AdsController {
             res.status(400).json({ message: err.message })
         }
     }
-
-  
 
 }
