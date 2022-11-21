@@ -22,6 +22,8 @@ const ratingRouter = require('./routes/RatingRoutes')
 app.use('/rating', ratingRouter)
 const questionRouter = require('./routes/QuestionRoutes')
 app.use('/question', questionRouter)
+const answerRouter = require('./routes/AnswerRoutes')
+app.use('/answer', answerRouter)
 
 app.listen(3000, () => console.log('Server started'))
 
