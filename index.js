@@ -18,6 +18,8 @@ const adsRouter = require('./routes/AdsRoutes')
 app.use('/ads', adsRouter)
 const userRouter = require('./routes/UserRoutes')
 app.use('/users', userRouter)
+const ratingRouter = require('./routes/RatingRoutes')
+app.use('/rating', ratingRouter)
 
 app.listen(3000, () => console.log('Server started'))
 
