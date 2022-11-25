@@ -1,16 +1,12 @@
 const express = require('express')
 const router = express.Router()
-const jwt = require("jsonwebtoken");
 const UserController = require('../controllers/UserController')
-const AuthController = require('../controllers/AuthController')
+const { verifyToken, verifyTokenAndAuthorization, verifyTokenAndAdmin } = require('../routes/VerifyToken')
 
-console.log("Chegou no UserRoutes")
-
-
-router.post('/login', AuthController.loginWithEmail)
-router.get('/:id', UserController.getUser)
+router.post('/login', UserController.loginWithEmail)
+router.get('/:id', verifyTokenAndAuthorization, UserController.getUser)
 router.post('/create', UserController.createUser)
-router.get('/', UserController.showAllUsers)
-router.patch('/:id', UserController.modifyUserByID)
+router.get('/', verifyTokenAndAdmin, UserController.showAllUsers)
+router.patch('/:id', verifyToken, UserController.modifyUserByID)
 
 module.exports = router

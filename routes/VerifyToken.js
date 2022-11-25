@@ -1,18 +1,22 @@
 const jwt = require("jsonwebtoken");
 
 const verifyToken = (req, res, next) => {
-  const authHeader = req.headers.token;
-  if (authHeader) {
-    const token = authHeader.split(" ")[1];
-    jwt.verify(token, process.env.JWT_SEC, (err, user) => {
-      if (err) res.status(403).json("Token is not valid!");
-      req.user = user;
-      next();
-    });
-  } else {
-    return res.status(401).json("You are not authenticated!");
-  }
-};
+  const token = req.body.token || req.query.token || req.headers['x-access-token'] || req.headers['x-api-key']
+  const secret = process.env.SECRET;
+    if(token) {
+      jwt.verify(token, secret, (err, user) => {
+        if (err) {
+          res.status(400).json({err})
+        } else {
+          req.user = user
+          next()
+        }
+      })
+    } else {
+      return res.status(401).json("Unauthorized")
+    }
+}
+
 
 const verifyTokenAndAuthorization = (req, res, next) => {
   verifyToken(req, res, () => {
@@ -34,8 +38,30 @@ const verifyTokenAndAdmin = (req, res, next) => {
   });
 };
 
+const verifyTokenAndBuyer = (req, res, next) => {
+  verifyToken(req, res, () => {
+    if (req.user.isBuyer) {
+      next();
+    } else {
+      res.status(403).json("You are not alowed to do that!");
+    }
+  });
+};
+
+const verifyTokenAndSeller = (req, res, next) => {
+  verifyToken(req, res, () => {
+    if (req.user.isSeller) {
+      next();
+    } else {
+      res.status(403).json("You are not alowed to do that!");
+    }
+  });
+};
+
 module.exports = {
   verifyToken,
   verifyTokenAndAuthorization,
   verifyTokenAndAdmin,
+  verifyTokenAndBuyer,
+  verifyTokenAndSeller
 };
