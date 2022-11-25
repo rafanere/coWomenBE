@@ -1,10 +1,11 @@
 const express = require('express')
 const router = express.Router()
 const AdsController = require('../controllers/AdsController')
+const { verifyToken, verifyTokenAndSeller } = require('../routes/VerifyToken')
 
-router.get('/', AdsController.showAllAds)
-router.get('/:id', AdsController.showAdsByID)
-router.post('/', AdsController.createAd)
-router.put('/:id', AdsController.modifyAdsByID)
+router.get('/', verifyToken, AdsController.showAllAds)
+router.get('/:id', verifyToken, AdsController.showAdsByID)
+router.post('/', verifyTokenAndSeller, AdsController.createAd)
+router.put('/:id', verifyTokenAndSeller, AdsController.modifyAdsByID)
 
 module.exports = router

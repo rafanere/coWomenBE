@@ -1,7 +1,5 @@
 const mongoose = require('mongoose')
 
-console.log("Chegou no UserModel")
-
 const UserSchema = new mongoose.Schema({
     nickname: {
         type: String,
