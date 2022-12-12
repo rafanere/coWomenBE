@@ -1,7 +1,6 @@
 const express = require ('express')
 const app = express()
 const mongoose = require('mongoose')
-const morgan = require('morgan')
 require('dotenv').config()
 
 const DB_URL = process.env.DB_URL
@@ -14,8 +13,6 @@ async function main() {
 main().catch((err) => console.log(err))
 
 app.use(express.json())
-
-app.use(morgan('dev'))
 
 const adsRouter = require('./routes/AdsRoutes')
 app.use('/ads', adsRouter)
