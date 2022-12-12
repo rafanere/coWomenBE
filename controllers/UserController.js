@@ -1,4 +1,5 @@
 const bcrypt = require("bcrypt")
+const jwt = require("jsonwebtoken")
 const User = require('../models/userModel')
 
 module.exports = class UserController {
@@ -14,7 +15,6 @@ module.exports = class UserController {
             password: req.body.password,
             confirmpassword: req.body.confirmpassword
         })
-        console.log("CreateUser")
         try {
             const nicknameExists = await User.findOne({nickname: userInicial.nickname})
             // verifica a existência do nickname 
@@ -40,7 +40,6 @@ module.exports = class UserController {
             const passwordHash = await bcrypt.hash(userInicial.password, salt)
             const confirmationPasswordHash = await bcrypt.hash(userInicial.confirmpassword, salt)
             
-            /*console.log(user, salt, passwordHash)*/
             // cria o usuário
             const userFinal = new User({
                 nickname: req.body.nickname,
@@ -51,18 +50,62 @@ module.exports = class UserController {
                 password: passwordHash,
                 confirmpassword: confirmationPasswordHash
             }) 
-            await userFinal.save()
-            res.status(201).json(userFinal)
-        } catch (err) {
+                const secret = process.env.SECRET;
+                const accessToken = jwt.sign(
+                    {
+                        id: userFinal._id,
+                        email: userFinal.email
+                    },
+                    secret
+                )
+                await userFinal.save()
+                res.status(201).json({ msg: "Usuário criado e autenticação realizada", userFinal, accessToken })
+
+            } catch (err) {
             res.status(400).json({ message: err.message })
         }
     }
+
+
+    static async loginWithEmail (req, res) {
+        const login = ({
+            email: req.body.email,
+            password: req.body.password
+        })
+        const user = await User.findOne({ email: login.email })
+        // verifica a existência do email  
+        if (!user) {
+            return res.status(422).json({ msg: "O e-mail é obrigatório." })
+        }
+        const checkPassword = await bcrypt.compare(login.password, user.password)
+        // compara a senha inserida com a senha do user
+        if (!checkPassword) {
+            return res.status(422).json({ msg: "Senha inválida" })
+        }
+        try {
+            const secret = process.env.SECRET;
+            const accessToken = jwt.sign(
+                {
+                    id: user._id,
+                    email: user.email,
+                    isAdmin: user.isAdmin,
+                    isSeller: user.isSeller,
+                    isBuyer: user.isBuyer
+                },
+                secret
+            )
+            res.status(200).json({ msg: "Autenticação realizada", accessToken })
+        } catch (error) {
+            res.status(500).json({ msg: error })
+        }
+    }
+
 
     // Private Route
     static async getUser(req, res) {
         const id = req.params.id;
     // check if user exists
-        const user = await User.findById(id, "-password");
+        const user = await User.findById(id, "-password -confirmpassword");
         if (!user) {
             return res.status(404).json({ msg: "Usuário não encontrado!" });
         }
@@ -74,7 +117,6 @@ module.exports = class UserController {
         try {
             const users = await User.find()
             res.status(200).json(users)
-            console.log(users)
         } catch (err) {
             res.status(500).json({ message: err.message })
         }

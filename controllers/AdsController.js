@@ -1,4 +1,5 @@
 const Ads = require('../models/adsModel')
+const { verifyToken, verifyTokenAndAuthorization } = require ('../routes/VerifyToken')
 
 module.exports = class AdsController {
 
@@ -13,11 +14,11 @@ module.exports = class AdsController {
     }
 
     // Buscando um anúncio específico 
-    static async showAdsByID(req, res) {
+    static async showAdsByID(req, res)  {
         try {
             const ads = await Ads.findById(req.params.id)
             if (ads == null) {
-                return res.status(404).json({ message: 'Cannot find ads'})
+                return res.json({message: err.message}) //res.status(404).json({ message: 'Cannot find ads'})
             }
             res.json(ads)
         } catch (err) {
