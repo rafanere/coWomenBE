@@ -7,48 +7,37 @@ module.exports = class UserController {
     // Criando um usuário
     static async createUser(req, res) {
         const userInicial = ({
-            nickname: req.body.nickname,
             name: req.body.name,
             lastname: req.body.lastname,
-            image: req.body.image,
+            cpfcnpj: req.body.cpfcnpj,
             email: req.body.email,
             password: req.body.password,
-            confirmpassword: req.body.confirmpassword
         })
         try {
-            const nicknameExists = await User.findOne({nickname: userInicial.nickname})
-            // verifica a existência do nickname 
-            
-            if (nicknameExists) {
-                return res.status(422).json({msg: "Nickname já foi utilizado. Por gentileza, utilize outro."})
+
+            // verifica a existência do usuario utilizando o cpf ou cnpj
+            const cpfcnpjExists = await User.findOne({email: userInicial.cpfcnpj})
+            if (cpfcnpjExists) {
+                return res.status(422).json({msg: "CPF/CNPJ inválido."})
             }
 
             // verifica a existência do usuario utilizando o email 
             const userExists = await User.findOne({email: userInicial.email})
             if (userExists) {
-                return res.status(422).json({msg: "E-mail já encontra-se na base de dados."})
+                return res.status(422).json({msg: "E-mail inválido."})
             }
-
-            // verifica se a senha e a senha de confirmação são iguais
-            if (userInicial.password != userInicial.confirmpassword){
-                return res.status(422)
-                .json({msg: "A senha e a confirmação da senha precisam ser iguais!"})
-            } 
 
             // cria a senha
             const salt = await bcrypt.genSalt(12);
             const passwordHash = await bcrypt.hash(userInicial.password, salt)
-            const confirmationPasswordHash = await bcrypt.hash(userInicial.confirmpassword, salt)
-            
+
             // cria o usuário
             const userFinal = new User({
-                nickname: req.body.nickname,
                 name: req.body.name,
                 lastname: req.body.lastname,
-                image: req.body.image,
+                cpfcnpj: req.body.cpfcnpj,
                 email: req.body.email,
                 password: passwordHash,
-                confirmpassword: confirmationPasswordHash
             }) 
                 const secret = process.env.SECRET;
                 const accessToken = jwt.sign(
@@ -75,7 +64,7 @@ module.exports = class UserController {
         const user = await User.findOne({ email: login.email })
         // verifica a existência do email  
         if (!user) {
-            return res.status(422).json({ msg: "O e-mail é obrigatório." })
+            return res.status(422).json({ msg: "E-mail inválido." })
         }
         const checkPassword = await bcrypt.compare(login.password, user.password)
         // compara a senha inserida com a senha do user
@@ -105,7 +94,7 @@ module.exports = class UserController {
     static async getUser(req, res) {
         const id = req.params.id;
     // check if user exists
-        const user = await User.findById(id, "-password -confirmpassword");
+        const user = await User.findById(id, "-password");
         if (!user) {
             return res.status(404).json({ msg: "Usuário não encontrado!" });
         }
