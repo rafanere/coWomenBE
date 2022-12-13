@@ -1,11 +1,6 @@
 const mongoose = require('mongoose')
 
 const UserSchema = new mongoose.Schema({
-    nickname: {
-        type: String,
-        required: [true, 'Nickname é obrigatorio'],
-        index: true
-    },
     name: {
         type: String,
         required: [true, 'Nome é obrigatório'],
@@ -14,8 +9,9 @@ const UserSchema = new mongoose.Schema({
         type: String,
         required: [true, 'Sobrenome é obrigatório'],
     },
-    image: {
+    cpfcnpj: {
         type: String,
+        required: [true, 'CPF/CNPJ é obrigatório']
     },
     email: { 
         type: String,
@@ -25,10 +21,6 @@ const UserSchema = new mongoose.Schema({
         type: String,
         required: [true, 'Senha é obrigatória']
     },
-    confirmpassword: {
-        type: String,
-        required: [true, 'Senha é obrigatória']
-    }, 
     isSeller: {
         type: Boolean,
         default: false
@@ -39,7 +31,7 @@ const UserSchema = new mongoose.Schema({
     }, 
     isAdmin: {
         type: Boolean,
-        default: false
+        default: true
     }
 })
 
