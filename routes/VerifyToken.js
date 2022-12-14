@@ -40,7 +40,10 @@ const verifyTokenAndAdmin = (req, res, next) => {
 
 const verifyTokenAndBuyer = (req, res, next) => {
   verifyToken(req, res, () => {
-    if (req.user.isBuyer) {
+    if (req.user.isAdmin) {
+      next();
+    }
+    else if (req.user.isBuyer) {
       next();
     } else {
       res.status(403).json("You are not alowed to do that!");
@@ -50,7 +53,9 @@ const verifyTokenAndBuyer = (req, res, next) => {
 
 const verifyTokenAndSeller = (req, res, next) => {
   verifyToken(req, res, () => {
-    if (req.user.isSeller) {
+    if (req.user.isAdmin) {
+      next();
+    } else if (req.user.isSeller) {
       next();
     } else {
       res.status(403).json("You are not alowed to do that!");

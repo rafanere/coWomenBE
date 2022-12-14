@@ -90,7 +90,7 @@ module.exports = class UserController {
     }
 
 
-    // Private Route
+    
     static async getUser(req, res) {
         const id = req.params.id;
     // check if user exists
@@ -112,7 +112,7 @@ module.exports = class UserController {
     }
 
     // Buscando um usuário específico 
-    static async showLoginById(req, res) {
+    static async showLoginBy(req, res) {
         try {
             const users = await Users.findById(req.params.id)
             if (users == null) {

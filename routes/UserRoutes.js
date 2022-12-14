@@ -9,4 +9,5 @@ router.post('/create', UserController.createUser)
 router.get('/', verifyTokenAndAdmin, UserController.showAllUsers)
 router.patch('/:id', verifyToken, UserController.modifyUserByID)
 
+
 module.exports = router

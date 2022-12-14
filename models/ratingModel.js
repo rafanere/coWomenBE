@@ -1,11 +1,6 @@
 const mongoose = require('mongoose')
 
 const ratingSchema   = new mongoose.Schema({
-    overview: {
-        type: String,
-        required: [true, 'Título é obrigatorio'],
-        index: true
-    },
     description: {
         type: String,
         required: [true, 'Descrição é obrigatória'],
