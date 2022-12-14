@@ -1,5 +1,6 @@
 const Ads = require('../models/adsModel')
 const { verifyToken, verifyTokenAndAuthorization } = require ('../routes/VerifyToken')
+const User = require('../controllers/UserController')
 
 module.exports = class AdsController {
 
@@ -48,7 +49,7 @@ module.exports = class AdsController {
         const ads = new Ads({
             title: req.body.title,
             description: req.body.description,
-            image: req.body.image,
+            image: req.body.image
         })
         try {
             const newAd = await ads.save()

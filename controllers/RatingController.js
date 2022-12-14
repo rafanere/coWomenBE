@@ -44,7 +44,6 @@ module.exports = class RatingController {
     // Criando uma avaliação
     static async createRating(req, res) {
         const rating = new Ratings({
-            overview: req.body.overview,
             description: req.body.description,
             stars: req.body.stars,
         })
