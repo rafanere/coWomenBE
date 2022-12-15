@@ -46,6 +46,8 @@ module.exports = class RatingController {
         const rating = new Ratings({
             description: req.body.description,
             stars: req.body.stars,
+            idUser: req.body.idUser,
+            idAds: req.body.idAds
         })
         try {
             const newRating = await rating.save()

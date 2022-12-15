@@ -18,13 +18,13 @@ module.exports = class UserController {
             // verifica a existência do usuario utilizando o cpf ou cnpj
             const cpfcnpjExists = await User.findOne({email: userInicial.cpfcnpj})
             if (cpfcnpjExists) {
-                return res.status(422).json({msg: "CPF/CNPJ inválido."})
+                return res.status(422).json({msg: "CPF/CNPJ já utilizado."})
             }
 
             // verifica a existência do usuario utilizando o email 
             const userExists = await User.findOne({email: userInicial.email})
             if (userExists) {
-                return res.status(422).json({msg: "E-mail inválido."})
+                return res.status(422).json({msg: "E-mail já utilizado."})
             }
 
             // cria a senha

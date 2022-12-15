@@ -44,7 +44,10 @@ module.exports = class QuestionController {
     // Criando uma pergunta
     static async createQuestion(req, res) {
         const question = new Question({
-            question: req.body.question
+            question: req.body.question,
+            idUser: req.body.idUser,
+            idAds: req.body.idAds
+
         })
         try {
             const newQuestion = await question.save()

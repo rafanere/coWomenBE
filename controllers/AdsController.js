@@ -49,7 +49,8 @@ module.exports = class AdsController {
         const ads = new Ads({
             title: req.body.title,
             description: req.body.description,
-            image: req.body.image
+            image: req.body.image,
+            idUser: req.body.idUser
         })
         try {
             const newAd = await ads.save()
