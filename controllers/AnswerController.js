@@ -44,7 +44,10 @@ module.exports = class AnswerController {
     // Criando uma resposta
     static async createAnswer(req, res) {
         const answer = new Answer({
-            answer: req.body.answer
+            answer: req.body.answer,
+            idUser: req.body.idUser,
+            idAds: req.body.idAds,
+            idQuestion: req.body.idQuestion
         })
         try {
             const newAnswer = await answer.save()
